@@ -1,0 +1,19 @@
+{
+  "name": "@rucas/shh",
+  "version": "1.0.0",
+  "description": "AWS KMS Express Middleware",
+  "main": "lib/index",
+  "types": "lib/index",
+  "repository": "https://github.com/rucas/shh.git",
+  "author": "rucas <lucas.rondenet@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/express": "^4.11.1",
+    "@types/tape": "^4.2.32",
+    "tape": "^4.9.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.215.1"
+  }
+}
