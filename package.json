@@ -38,7 +38,7 @@
   "private": false,
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
-    "connect": "^3.6.6",
+    "express": "^4.16.3",
     "husky": "^1.0.0-rc.13",
     "jest": "^23.1.0",
     "pkg-ok": "^2.2.0",
