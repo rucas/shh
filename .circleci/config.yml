@@ -55,8 +55,7 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: yarn test
-
-  release:
+  audit:
     docker:
       - image: circleci/node:latest
     steps:
@@ -64,10 +63,8 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: |
-          git config --global user.name "rucasbot"
-          git config --global user.email "rucasbot@gmail.com"
-          yarn release
-
+          npm i --package-lock-only
+          npm audit
   publish:
     docker:
       - image: circleci/node:latest
@@ -77,49 +74,63 @@ jobs:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: |
           printf "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          echo -e "$NPM_USERNAME\n$NPM_EMAIL\n" | yarn login
           SEMVER=$(echo "$CIRCLE_TAG" | cut -c2-)
-          yarn np $SEMVER
+          yarn publish --new-version $SEMVER
 
 workflows:
   version: 2
   build_lint_test:
     jobs:
-      - install
+      - install:
+          filters:
+            tags:
+              only: /^v.*/
       - pkg-ok: 
           requires:
             - install
+          filters:
+            tags:
+              only: /^v.*/
       - lint:
           requires:
             - install
+          filters:
+            tags:
+              only: /^v.*/
       - test:
           requires:
             - install
+          filters:
+            tags:
+              only: /^v.*/
       - test6:
           requires:
             - install
+          filters:
+            tags:
+              only: /^v.*/
       - testNext:
           requires:
             - install
-      - release:
-          requires:
-            - pkg-ok 
-            - lint
-            - test
-            - test6
-            - testNext
           filters:
-            branches:
-              ignore: /.*/
-            # only act on version tags
+            tags:
+              only: /^v.*/
+      - audit:
+          requires:
+            - install
+          filters:
             tags:
               only: /^v.*/
       - publish:
           requires:
+            - install
             - pkg-ok 
             - lint
             - test
             - test6
             - testNext
+            - audit
           filters:
             branches:
               ignore: /.*/

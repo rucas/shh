@@ -37,16 +37,14 @@
   "license": "MIT",
   "private": false,
   "publishConfig": {
-	"access": "public"
+    "access": "public"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
     "express": "^4.16.3",
     "husky": "^1.0.0-rc.13",
     "jest": "^23.1.0",
-    "np": "^3.0.4",
     "pkg-ok": "^2.2.0",
-    "release": "^4.0.1",
     "standard": "^11.0.1",
     "supertest": "^3.1.0"
   },
