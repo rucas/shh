@@ -64,6 +64,8 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: |
+          git config --global user.name "rucasbot"
+          git config --global user.email "rucasbot@gmail.com"
           yarn release
 
   publish:
@@ -74,8 +76,9 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: |
-          SEMVER=$(echo "v1.0.1-beta" | cut -c2-)
-          yarn publish --new-version $SEMVER
+          printf "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          SEMVER=$(echo "$CIRCLE_TAG" | cut -c2-)
+          yarn np $SEMVER
 
 workflows:
   version: 2
