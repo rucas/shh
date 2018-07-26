@@ -1,5 +1,17 @@
 version: 2
 jobs:
+  install:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
   pkg-ok:
     docker:
       - image: circleci/node:latest
@@ -10,18 +22,12 @@ jobs:
       - run:
           name: Install dependencies
           command: yarn
-      - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules
       - run: yarn pkg-ok
   lint:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
-      - attach_workspace:
-          at: '.'
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: yarn lint
@@ -30,8 +36,6 @@ jobs:
       - image: circleci/node:8
     steps:
       - checkout
-      - attach_workspace:
-          at: '.'
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: yarn test
@@ -40,8 +44,6 @@ jobs:
       - image: circleci/node:6
     steps:
       - checkout
-      - attach_workspace:
-          at: '.'
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: yarn test
@@ -50,8 +52,6 @@ jobs:
       - image: circleci/node:latest
     steps:
       - checkout
-      - attach_workspace:
-          at: '.'
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: yarn test
@@ -61,8 +61,6 @@ jobs:
       - image: circleci/node:latest
     steps:
       - checkout
-      - attach_workspace:
-          at: '.'
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: |
@@ -73,8 +71,6 @@ jobs:
       - image: circleci/node:latest
     steps:
       - checkout
-      - attach_workspace:
-          at: '.'
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: |
@@ -85,11 +81,22 @@ workflows:
   version: 2
   build_lint_test:
     jobs:
-      - pkg-ok 
-      - lint
-      - test
-      - test6
-      - testNext
+      - install
+      - pkg-ok: 
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - test6:
+          requires:
+            - install
+      - testNext:
+          requires:
+            - install
       - release:
           requires:
             - pkg-ok 
