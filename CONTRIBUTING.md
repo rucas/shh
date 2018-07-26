@@ -28,6 +28,14 @@ $ yarn lint
 $ yarn test
 ```
 
+To run a specific test:
+
+```sh
+$ yarn test -t '<regex>'
+```
+
+More info [here](https://jestjs.io/docs/en/cli#testnamepattern-regex).
+
 ### git-hooks
 
 [Husky](https://github.com/typicode/husky) is set-up to run on:

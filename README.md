@@ -89,6 +89,9 @@ file once upon request and use cache for each other subsequent request.
 #### Options
 
 - file (String) — The location of encrypted *.env file
+
+- maxAge (String) — A string following zeit [ms](https://github.com/zeit/ms) conventions representing ttl of cache of decrypted env vars. 
+After maxAge threshold, middleware reads in file again, decrypts and sets in cache. Default is '1d' representing 1 day.
  
 - params (map) — An optional map of parameters to bind to every request 
 sent by this service object. For more information on bound parameters, 
