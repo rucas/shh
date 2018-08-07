@@ -1,5 +1,7 @@
 # shh
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/rucas/shh.svg)](https://greenkeeper.io/)
+
 > AWS KMS simplified 
 
 AWS Key Managment Service, can be hard to incorporate into your stack. This
